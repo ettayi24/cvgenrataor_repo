@@ -1,0 +1,22 @@
+{% extends "custom_admin/adminbase.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">View User: {{ user.Full_Name }}</h2>
+    
+    <div class="card p-4 shadow-sm">
+        <p><strong>User ID:</strong> {{ user.User_id }}</p>
+        <p><strong>Full Name:</strong> {{ user.Full_Name }}</p>
+        <p><strong>Email:</strong> {{ user.Email }}</p>
+    </div>
+
+    <div class="mt-3">
+        <a href="{% url 'admin_manage_users' %}" class="btn btn-secondary">
+            <i class="fa-solid fa-arrow-left"></i> Back
+        </a>
+        <a href="{% url 'delete_user' user.User_id %}" class="btn btn-danger">
+            <i class="fa-solid fa-trash"></i> Delete
+        </a>
+    </div>
+</div>
+{% endblock %}

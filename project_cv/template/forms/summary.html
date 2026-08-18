@@ -1,0 +1,54 @@
+{% extends "forms/cv_form_base.html" %}
+
+{% block content %}
+<style>
+    /* Standardized form layout */
+    .form-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+    .form-row .form-group {
+        flex-grow: 1;
+        margin: 0;
+    }
+    .summary-text {
+        text-align: center;
+        margin-bottom: 40px;
+        font-size: 1.1rem;
+        color: #555;
+    }
+</style>
+
+<div class="summary-content">
+    <p class="summary-text">You've successfully completed all the steps. Click 'Finish' below to save your information and see your final CV!</p>
+</div>
+    
+
+    <div class="button-container">
+        <!-- Previous -->
+    <a href="{% url 'add_reference' cv.CV_id %}" 
+       class="btn btn-secondary">
+       Previous
+    </a>
+
+    <!-- Save -->
+    <button type="submit"
+            name="action"
+            value="save"
+            class="btn btn-primary">
+        Finish
+    </button>
+    
+    <!-- cancel -->
+    <button type="submit"
+            name="action"
+            value="cancel"
+            onclick="return confirm('Are you sure you want to cancel?');"
+            class="btn btn-danger" formnovalidate>
+            Cancel
+    </button>
+    </div>
+
+{% endblock %}

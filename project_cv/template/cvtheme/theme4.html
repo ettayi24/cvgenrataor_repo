@@ -1,0 +1,287 @@
+{% load static %}
+{% block title %}{{ personal.First_Name }} {{ personal.Last_Name }} - CV{% endblock %}
+
+{% block content %}
+<!-- <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Open+Sans&display=swap" rel="stylesheet"> -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> 
+
+<link rel="stylesheet" href="{% static 'css/poppins.css' %}">
+<link rel="stylesheet" href="{% static 'css/fontawesome.css' %}">
+
+<style>
+/* Prism Theme with Gradient Customization */
+:root {
+    --prism-gradient: linear-gradient(135deg, #667eea, #764ba2, #ff6a00); /* 🎨 Change this for different header colors */
+}
+
+body {
+    background: linear-gradient(135deg, #f0f4ff, #f9f9f9);
+    font-family: 'Open Sans', sans-serif;
+    color: #333;
+}
+
+/* CV Container */
+.cv-prism {
+    max-width: 1100px;
+    margin: 30px auto;
+    background: rgba(255,255,255,0.85);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+    border-radius: 14px;
+    overflow: hidden;
+    backdrop-filter: blur(6px);
+}
+
+/* Header */
+.cv-prism-header {
+    background: var(--prism-gradient);
+    color: #fff;
+    text-align: center;
+    padding: 40px 20px;
+    position: relative;
+}
+.cv-prism-header img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 4px solid rgba(255,255,255,0.7);
+    margin-bottom: 15px;
+    object-fit: cover;
+}
+.cv-prism-header h1 {
+    margin: 0;
+    font-size: 28px;
+    font-family: 'Montserrat', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+.cv-prism-header p {
+    margin: 5px 0 0;
+    font-size: 16px;
+}
+
+/* Layout */
+.cv-prism-body {
+    display: grid;
+    grid-template-columns: 32% 68%;
+    padding: 30px;
+    gap: 25px;
+}
+.cv-card {
+    background: rgba(255,255,255,0.8);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+/* Section Titles */
+.cv-card h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    text-transform: uppercase;
+    margin: 0 0 12px;
+    padding-left: 10px;
+    border-left: 4px solid transparent;
+    border-image: var(--prism-gradient);
+    border-image-slice: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #444;
+}
+.cv-card h2 i {
+    background: var(--prism-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Lists */
+.cv-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 14px;
+}
+.cv-card li {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.cv-card li i {
+    background: var(--prism-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.cv-card li a {
+    color: inherit;
+    text-decoration: none;
+}
+.cv-card li a:hover {
+    text-decoration: underline;
+}
+
+/* Tags for interests & skills */
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.tags span {
+    background: var(--prism-gradient);
+    color: #fff;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+}
+
+/* Entries (experience, education, etc.) */
+.entry {
+    margin-bottom: 18px;
+}
+.entry h3 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+    color: #222;
+    display: flex;
+    justify-content: space-between;
+}
+.entry span {
+    font-size: 13px;
+    color: #777;
+    font-weight: normal;
+}
+.entry p {
+    font-size: 14px;
+    margin: 5px 0 0;
+    line-height: 1.6;
+}
+.entry .designation {
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 5px;
+    color: #333;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .cv-prism-body {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+
+<div class="cv-prism">
+    <div class="cv-prism-header">
+        {% if personal.Profile_Image %}
+            <img src="{{ personal.Profile_Image.url }}" alt="Profile Photo">
+        {% else %}
+            <img src="{% static 'images/default_profile.png' %}" alt="Profile Photo">
+        {% endif %}
+        <h1>{{ personal.First_Name }} {{ personal.Last_Name }}</h1>
+        <p>{{ personal.Designation }}</p>
+    </div>
+
+    <div class="cv-prism-body">
+        <!-- Left Column -->
+        <div class="cv-card">
+            <h2><i class="fas fa-envelope"></i> Contact</h2>
+            <ul>
+                <li><i class="fas fa-envelope"></i> {{ personal.Email }}</li>
+                <li><i class="fas fa-phone-alt"></i> {{ personal.Contact }}</li>
+                <li><i class="fas fa-map-marker-alt"></i> {{ personal.Address }}</li>
+            </ul>
+
+            <h2><i class="fas fa-share-alt"></i> Social</h2>
+            <ul>
+                {% if personal.linked_in %}<li><i class="fab fa-linkedin"></i><a href="{{ personal.linked_in }}" target="_blank"> LinkedIn</a></li>{% endif %}
+                {% if personal.github %}<li><i class="fab fa-github"></i><a href="{{ personal.github }}" target="_blank"> GitHub</a></li>{% endif %}
+            </ul>
+
+            <h2><i class="fas fa-tools"></i> Skills</h2>
+            <div class="tags">
+                {% for skill in skills %}
+                    <span>{{ skill.Skill_Name }}</span>
+                {% empty %}
+                    <p style="font-size: 12px; color: #777;">No skills added yet.</p>
+                {% endfor %}
+            </div>
+
+            <h2><i class="fas fa-language"></i> Languages</h2>
+            <ul>
+                {% for lang in languages %}
+                    <li>{{ lang.Language_Name }} ({{ lang.Proficiency }})</li>
+                {% empty %}
+                    <p style="font-size: 12px; color: #777;">No languages added yet.</p>
+                {% endfor %}
+            </ul>
+
+            <h2><i class="fas fa-heart"></i> Interests</h2>
+            <div class="tags">
+                {% for i in interests %}
+                    <span>{{ i.Interest_Name }}</span>
+                {% empty %}
+                    <p style="font-size: 12px; color: #777;">No interests added yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="cv-card">
+            <h2><i class="fas fa-user"></i> Summary</h2>
+            <p>{{ personal.summary|default:"A results-driven professional with strong problem-solving skills and a proven ability to adapt in dynamic environments." }}</p>
+
+            <h2><i class="fas fa-briefcase"></i> Experience</h2>
+            {% for exp in experience %}
+                <div class="entry">
+                    <h3>{{ exp.Company_Name }} <span>{{ exp.Start_date|date:"M Y" }} - {% if exp.End_date %}{{ exp.End_date|date:"M Y" }}{% else %}Present{% endif %}</span></h3>
+                    <p class="designation">{{ exp.Designation }}</p>
+                    <p>{{ exp.Description }}</p>
+                </div>
+            {% empty %}
+                <p>No work experience added yet.</p>
+            {% endfor %}
+
+            <h2><i class="fas fa-graduation-cap"></i> Education</h2>
+            {% for edu in education %}
+                <div class="entry">
+                    <h3>{{ edu.Degree }} – {{ edu.University }} <span>{{ edu.Start_year }} - {% if edu.End_year %}{{ edu.End_year }}{% else %}Present{% endif %}</span></h3>
+                    <p>{{ edu.Description }}</p>
+                </div>
+            {% empty %}
+                <p>No education details added yet.</p>
+            {% endfor %}
+
+            <h2><i class="fas fa-project-diagram"></i> Projects</h2>
+            {% for proj in projects %}
+                <div class="entry">
+                    <h3>{{ proj.Project_Name }}</h3>
+                    <p>{{ proj.Description }}</p>
+                    {% if proj.Link %}<a href="{{ proj.Link }}" target="_blank">View Project</a>{% endif %}
+                </div>
+            {% empty %}
+                <p>No projects added yet.</p>
+            {% endfor %}
+
+            <h2><i class="fas fa-certificate"></i> Certificates</h2>
+            {% for cert in certificates %}
+                <div class="entry">
+                    <h3>{{ cert.Certificate_Name }} <span>{{ cert.Organization }} ({{ cert.Year }})</span></h3>
+                </div>
+            {% empty %}
+                <p>No certificates added yet.</p>
+            {% endfor %}
+
+            <h2><i class="fas fa-id-badge"></i> References</h2>
+            {% for ref in references %}
+                <div class="entry">
+                    <h3>{{ ref.Reference_Name }} <span>{{ ref.Designation }}, {{ ref.Company }}</span></h3>
+                    <p>Contact: {{ ref.Contact }} | Email: {{ ref.Email }}</p>
+                </div>
+            {% empty %}
+                <p>No references added yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

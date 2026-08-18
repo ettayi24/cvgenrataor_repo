@@ -1,0 +1,177 @@
+{% extends "forms/cv_form_base.html" %}
+
+{% block content %}
+{% with title="Interests" button_text="Next" step=8 progress=80 %}
+
+<style>
+    /* Interest form row layout */
+    .form-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 15px;
+    }
+    .form-row .form-group {
+        flex: 1;
+        margin: 0;
+    }
+
+    /* Remove (trash) button */
+    .remove-form {
+        background: rgba(231, 76, 60, 0.15);
+        border: 1px solid rgba(231, 76, 60, 0.3);
+        color: #c0392b;
+        padding: 6px 10px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .remove-form:hover {
+        background: rgba(231, 76, 60, 0.25);
+        transform: scale(1.05);
+    }
+
+    /* Add button (glass green style) */
+    #add-form {
+        background: rgba(144, 238, 144, 0.25);
+        border: 1px solid rgba(144, 238, 144, 0.4);
+        color: #1a5e27;
+        padding: 8px 15px;
+        font-size: 14px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.3s, transform 0.2s;
+        font-weight: 500;
+        margin-bottom: 20px;
+        display: inline-block;
+        backdrop-filter: blur(3px);
+    }
+    #add-form:hover {
+        background: rgba(144, 238, 144, 0.45);
+        transform: translateY(-2px);
+    }
+</style>
+
+<!-- Add Font Awesome for the trash can icon -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+
+{{ formset.management_form }}
+
+<div id="form-container">
+    {% for form in formset %}
+        <div class="form-row">
+            <div class="form-group">
+                <label for="{{ form.Interest_Name.id_for_label }}">Interest</label>
+                {{ form.Interest_Name }}
+            </div>
+            {{ form.id }}
+            {{ form.DELETE }}
+            <button type="button" class="remove-form" aria-label="Remove this interest">
+                <i class="fas fa-trash-alt"></i>
+            </button>
+        </div>
+    {% empty %}
+        <div class="form-row">
+            <div class="form-group">
+                <label for="{{ formset.empty_form.Interest_Name.id_for_label }}">Interest</label>
+                {{ formset.empty_form.Interest_Name }}
+            </div>
+            {{ formset.empty_form.id }}
+            {{ formset.empty_form.DELETE }}
+            <button type="button" class="remove-form" aria-label="Remove this interest">
+                <i class="fas fa-trash-alt"></i>
+            </button>
+        </div>
+    {% endfor %}
+</div>
+
+<button type="button" id="add-form">+ Add Another Interest</button>
+
+<div class="button-container">
+        <!-- Previous -->
+    <a href="{% url 'add_project' cv.CV_id %}" 
+       class="btn btn-secondary">
+       Previous
+    </a>
+
+    <!-- Skip -->
+    <a href="{% url 'add_reference' cv.CV_id %}" 
+       class="btn btn-info">
+       Skip
+    </a>
+
+    <!-- Save -->
+    <button type="submit"
+            name="action"
+            value="save"
+            class="btn btn-primary">
+        Save & Next
+    </button>
+    
+    <!-- cancel -->
+    <button type="submit"
+            name="action"
+            value="cancel"
+            onclick="return confirm('Are you sure you want to cancel?');"
+            class="btn btn-danger" formnovalidate>
+            Cancel
+    </button>
+    </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const formContainer = document.getElementById("form-container");
+    const addBtn = document.getElementById("add-form");
+    const totalForms = document.getElementById("id_form-TOTAL_FORMS");
+    const emptyFormHtml = `
+        <div class="form-group">
+            <label for="id_form-__prefix__-Interest_Name">Interest</label>
+            <input type="text" name="form-__prefix__-Interest_Name" placeholder="Interest" required id="id_form-__prefix__-Interest_Name">
+        </div>
+        <input type="hidden" name="form-__prefix__-id" id="id_form-__prefix__-id">
+        <input type="hidden" name="form-__prefix__-DELETE" id="id_form-__prefix__-DELETE">
+        <button type="button" class="remove-form" aria-label="Remove this interest">
+            <i class="fas fa-trash-alt"></i>
+        </button>
+    `;
+
+    function attachRemoveHandlers() {
+        document.querySelectorAll(".remove-form").forEach(btn => {
+            btn.onclick = () => {
+                const formRow = btn.closest(".form-row");
+                const deleteBox = formRow.querySelector("input[type='hidden'][name$='-DELETE']");
+                if (deleteBox) {
+                    // Mark for deletion (DB will delete on submit)
+                    deleteBox.value = "on";
+                    formRow.style.display = "none";
+                } else {
+                    // Unsaved form, just remove it
+                    formRow.remove();
+                    totalForms.value = document.querySelectorAll("#form-container .form-row").length;
+                }
+            };
+        });
+    }
+
+    addBtn.addEventListener("click", () => {
+        let formCount = parseInt(totalForms.value);
+        let newDiv = document.createElement("div");
+        newDiv.classList.add("form-row");
+        newDiv.innerHTML = emptyFormHtml.replace(/__prefix__/g, formCount);
+
+        formContainer.appendChild(newDiv);
+        totalForms.value = formCount + 1;
+        attachRemoveHandlers();
+    });
+
+    attachRemoveHandlers();
+});
+</script>
+
+{% endwith %}
+{% endblock %}

@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}About Us | CV Generator{% endblock %}
+
+{% block content %}
+<style>
+    /* About Page */
+.about-container {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.about-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 2rem;
+  color: #111827;
+}
+
+.about-intro {
+  text-align: center;
+  color: #6b7280;
+  font-size: 1rem;
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.about-card {
+  background: #f9fafb;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.about-card img {
+  width: 80px;  /* adjust as needed */
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 12px;
+  border: 2px solid #3b82f6;
+}
+
+.about-card h3 {
+  font-size: 1.3rem;
+  margin-bottom: 10px;
+  color: #111827;
+}
+
+.about-card p {
+  font-size: 0.95rem;
+  color: #4b5563;
+  line-height: 1.5;
+}
+
+.about-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+</style>
+
+<div class="about-container">
+  <h2>About CV Generator</h2>
+  <p class="about-intro">
+    CV Generator is a simple yet powerful tool designed to help job seekers create professional resumes quickly and effectively.
+    Our mission is to make CV creation accessible to everyone, regardless of design or technical skills.
+  </p>
+
+  <div class="about-grid">
+    <div class="about-card">
+      <img src="{% static 'images/our_mission.jpg' %}" alt="Mission">
+      <h3>Our Mission</h3>
+      <p>
+        To empower individuals with a free, easy-to-use platform that helps them showcase their skills, 
+        education, and experience in the best possible way.
+      </p>
+    </div>
+
+    <div class="about-card">
+      <img src="{% static 'images/our_vision.jpg' %}" alt="Vision">
+      <h3>Our Vision</h3>
+      <p>
+        To become the go-to platform for resume building worldwide, trusted by students, professionals, 
+        and organizations alike.
+      </p>
+    </div>
+
+    <div class="about-card">
+      <img src="{% static 'images/why_choose_us.jpg' %}" alt="Why Choose Us">
+      <h3>Why Choose Us?</h3>
+      <p>
+        We focus on simplicity, customization, and speed. Our templates and tools are designed to save 
+        you time while delivering professional results.
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %}

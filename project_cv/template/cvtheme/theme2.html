@@ -1,0 +1,306 @@
+{% load static %}
+{% block content %}
+<!-- <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> -->
+
+<link rel="stylesheet" href="{% static 'css/poppins.css' %}">
+<link rel="stylesheet" href="{% static 'css/fontawesome.css' %}">
+
+<style>
+:root {
+    --color-primary-start: #2c3e50;
+    --color-primary-end: #34495e;
+    --color-text: #7f8c8d;
+    --color-background: #fdfdfd;
+
+    --border-orange: #e67e22;
+    --border-blue: #3498db;
+    --border-purple: #9b59b6;
+    --border-teal: #1abc9c;
+    --border-red: #e74c3c;
+    --border-amber: #f39c12;
+    --border-dark-blue: #2980b9;
+    --border-violet: #8e44ad;
+    --border-green: #16a085;
+}
+
+.cv-spectrum {
+    display: flex;
+    max-width: 1000px;
+    margin: 30px auto;
+    border-radius: 10px;
+    overflow: hidden;
+    font-family: 'Roboto', sans-serif;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+/* Sidebar */
+.cv-spectrum .sidebar {
+    width: 35%;
+    background: linear-gradient(180deg, var(--color-primary-start), var(--color-primary-end));
+    color: #fff;
+    padding: 30px 25px;
+    text-align: center;
+}
+.cv-spectrum .sidebar img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 3px solid var(--border-teal);
+    margin-bottom: 15px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+.cv-spectrum .sidebar h1 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 24px;
+    margin: 10px 0 5px;
+}
+.cv-spectrum .sidebar p {
+    font-size: 14px;
+    margin: 5px 0;
+}
+.cv-spectrum .contact-info li {
+    font-size: 14px;
+    margin: 8px 0;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.cv-spectrum .contact-info i {
+    color: var(--border-orange);
+    width: 20px;
+    text-align: center;
+}
+.cv-spectrum .sidebar a {
+    color: var(--border-orange);
+    text-decoration: none;
+    font-weight: 600;
+}
+.cv-spectrum .sidebar a:hover {
+    text-decoration: underline;
+}
+
+.cv-spectrum .section-title {
+    margin: 25px 0 10px;
+    font-size: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding-bottom: 4px;
+    border-bottom: 3px solid;
+    font-family: 'Poppins', sans-serif;
+    text-align: left;
+}
+.cv-spectrum .sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.cv-spectrum .sidebar ul li {
+    text-align: left;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+.cv-spectrum .skill-level {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.cv-spectrum .skill-level .dot {
+    height: 8px;
+    width: 8px;
+    background-color: #fff;
+    border-radius: 50%;
+    opacity: 0.3;
+}
+.cv-spectrum .skill-level .dot.filled {
+    opacity: 1;
+}
+
+/* Main */
+.cv-spectrum .main {
+    width: 65%;
+    background: var(--color-background);
+    padding: 30px;
+}
+.cv-spectrum .main h2 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 17px;
+    margin: 25px 0 15px;
+    text-transform: uppercase;
+    border-bottom: 3px solid;
+    padding-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.cv-spectrum .main .item {
+    margin-bottom: 25px;
+    padding: 10px;
+    border-radius: 6px;
+    background: rgba(0,0,0,0.02);
+    border: 1px solid #eee;
+}
+.cv-spectrum .main .item h3 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+}
+.cv-spectrum .main .item span {
+    font-size: 13px;
+    color: var(--color-text);
+    display: block;
+}
+.cv-spectrum .main .item p {
+    font-size: 14px;
+    margin: 8px 0;
+    line-height: 1.5;
+}
+.cv-spectrum .main a {
+    color: var(--border-dark-blue);
+    font-weight: 600;
+}
+.cv-spectrum .main a:hover {
+    text-decoration: underline;
+}
+
+/* Section colors */
+.sidebar .skills-title { border-color: var(--border-orange); }
+.sidebar .languages-title { border-color: var(--border-blue); }
+.sidebar .interests-title { border-color: var(--border-purple); }
+
+.main .summary-title { border-color: var(--border-teal); }
+.main .experience-title { border-color: var(--border-red); }
+.main .education-title { border-color: var(--border-amber); }
+.main .projects-title { border-color: var(--border-dark-blue); }
+.main .certificates-title { border-color: var(--border-violet); }
+.main .references-title { border-color: var(--border-green); }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .cv-spectrum { flex-direction: column; margin: 20px; }
+    .cv-spectrum .sidebar, .cv-spectrum .main { width: 100%; padding: 20px; }
+    .cv-spectrum .sidebar h1, .cv-spectrum .sidebar p, .cv-spectrum .section-title { text-align: center; }
+    .cv-spectrum .contact-info, .cv-spectrum .sidebar ul { align-items: center; justify-content: center; text-align: center; }
+}
+</style>
+
+<div class="cv-spectrum">
+    <aside class="sidebar">
+        {% if personal.Profile_Image %}
+            <img src="{{ personal.Profile_Image.url }}" alt="Profile">
+        {% else %}
+            <img src="{% static 'images/default_profile.jpg' %}" alt="Profile">
+        {% endif %}
+        <h1>{{ personal.First_Name }} {{ personal.Last_Name }}</h1>
+
+        <ul class="contact-info" style="list-style:none; padding:0;">
+            <li><i class="fas fa-envelope"></i> {{ personal.Email }}</li>
+            <li><i class="fas fa-phone-alt"></i> {{ personal.Contact }}</li>
+            <li><i class="fas fa-map-marker-alt"></i> {{ personal.Address }}</li>
+            {% if personal.linked_in %}
+              <li><i class="fab fa-linkedin"></i> <a href="{{ personal.linked_in }}" target="_blank">LinkedIn</a></li>
+            {% endif %}
+            {% if personal.github %}
+              <li><i class="fab fa-github"></i> <a href="{{ personal.github }}" target="_blank">GitHub</a></li>
+            {% endif %}
+        </ul>
+
+        <div>
+            <h3 class="section-title skills-title">Skills</h3>
+            <ul>
+                {% for skill in skills %}
+                    <li>
+                        {{ skill.Skill_Name }}
+                        <div class="skill-level">
+                            {% if skill.Proficiency_level == "Beginner" %}
+                                <div class="dot filled"></div><div class="dot"></div><div class="dot"></div>
+                            {% elif skill.Proficiency_level == "Intermediate" %}
+                                <div class="dot filled"></div><div class="dot filled"></div><div class="dot"></div>
+                            {% elif skill.Proficiency_level == "Advanced" %}
+                                <div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div>
+                            {% elif skill.Proficiency_level == "Expert" %}
+                                <div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div>
+                            {% else %}
+                            
+                                <span>({{ skill.Proficiency_level }})</span>
+                            {% endif %}
+                        </div>
+                    </li>
+                {% empty %}<li>No skills added.</li>{% endfor %}
+            </ul>
+        </div>
+
+        <div>
+            <h3 class="section-title languages-title">Languages</h3>
+            <ul>
+                {% for lang in languages %}
+                    <li>
+                        {{ lang.Language_Name }} ({{ lang.Proficiency }})
+                    </li>
+                {% empty %}<li>No languages added.</li>{% endfor %}
+            </ul>
+        </div>
+
+        <div>
+            <h3 class="section-title interests-title">Interests</h3>
+            <ul>
+                {% for i in interests %}
+                    <li>{{ i.Interest_Name }}</li>
+                {% empty %}<li>No interests added.</li>{% endfor %}
+            </ul>
+        </div>
+    </aside>
+
+    <main class="main">
+        <h2 class="summary-title"><i class="fas fa-user"></i> Professional Summary</h2>
+        <p>
+            {{ personal.summary|default:"A highly motivated and adaptable professional with strong skills in problem-solving, teamwork, and continuous learning. Experienced in managing multiple tasks while delivering quality results. Seeking opportunities to grow and contribute to organizational success." }}
+        </p>
+
+        <h2 class="experience-title"><i class="fas fa-briefcase"></i> Experience</h2>
+        {% for exp in experience %}
+            <div class="item">
+                <h3>{{ exp.Company_Name }}</h3>
+                <span>{{ exp.Start_date|date:"M Y" }} - {% if exp.End_date %}{{ exp.End_date|date:"M Y" }}{% else %}Present{% endif %}</span>
+                <p>{{ exp.Description }}</p>
+            </div>
+        {% empty %}<p>No work experience available.</p>{% endfor %}
+
+        <h2 class="education-title"><i class="fas fa-graduation-cap"></i> Education</h2>
+        {% for edu in education %}
+            <div class="item">
+                <h3>{{ edu.Degree }}</h3>
+                <span>{{ edu.University }} | {{ edu.Start_year }} - {% if edu.End_year %}{{ edu.End_year }}{% else %}Present{% endif %}</span>
+                <p>{{ edu.Description }}</p>
+            </div>
+        {% empty %}<p>No education details available.</p>{% endfor %}
+
+        <h2 class="projects-title"><i class="fas fa-tasks"></i> Projects</h2>
+        {% for proj in projects %}
+            <div class="item">
+                <h3>{{ proj.Project_Name }}</h3>
+                <p>{{ proj.Description }}</p>
+                {% if proj.Link %}<a href="{{ proj.Link }}" target="_blank">View Project</a>{% endif %}
+            </div>
+        {% empty %}<p>No projects available.</p>{% endfor %}
+
+        <h2 class="certificates-title"><i class="fas fa-certificate"></i> Certificates</h2>
+        {% for cert in certificates %}
+            <div class="item">
+                <h3>{{ cert.Certificate_Name }}</h3>
+                <span>{{ cert.Organization }} ({{ cert.Year }})</span>
+            </div>
+        {% empty %}<p>No certificates available.</p>{% endfor %}
+
+        <h2 class="references-title"><i class="fas fa-user-friends"></i> References</h2>
+        {% for ref in references %}
+            <div class="item">
+                <h3>{{ ref.Reference_Name }}</h3>
+                <span>{{ ref.Designation }}, {{ ref.Company }}</span>
+                <p>Contact: {{ ref.Contact }} | {{ ref.Email }}</p>
+            </div>
+        {% empty %}<p>No references available.</p>{% endfor %}
+    </main>
+</div>
+{% endblock %}

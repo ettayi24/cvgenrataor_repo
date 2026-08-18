@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV Generator</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" xintegrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        body {
+            /* Fallback color if image fails to load */
+            background-color: #f4f7f9;
+            background-image: var(--bg-image, none);
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            transition: background-image 0.5s ease, filter 0.5s ease;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        }
+        .main-container-overlay {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(255, 255, 255, 0.7);
+        }
+        .login-container {
+            max-width: 400px;
+            width: 100%;
+            padding: 2.5rem;
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e9ecef;
+        }
+        .form-title {
+            text-align: center;
+            font-weight: 700;
+            margin-bottom: 2rem;
+        }
+        .form-control {
+            border-radius: 8px;
+        }
+        .btn {
+            border-radius: 8px;
+            font-weight: 600;
+            transition: transform 0.3s ease-in-out;
+        }
+        .btn:hover, .btn:focus {
+            transform: scale(1.02);
+        }
+        .btn-primary {
+            background-color: #1c1c1c;
+            border-color: #1c1c1c;
+        }
+        .btn-primary:hover {
+            background-color: #000000;
+            border-color: #000000;
+        }
+        #signup-form, #login-error, #signup-success {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Login/Signup View -->
+<div class="main-container-overlay">
+    <div class="login-container">
+        <!-- Login Form -->
+        <div id="login-form-container">
+            <h3 class="form-title">Login</h3>
+            <form id="login-form">
+                <div class="mb-3">
+                    <label for="user-name" class="form-label">User Name</label>
+                    <input type="text" class="form-control" id="user-name" required placeholder="admin" onfocus="this.placeholder=''" onblur="this.placeholder='admin'">
+                </div>
+                <div class="mb-3">
+                    <label for="login-password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="login-password" required placeholder="Enter your password" onfocus="this.placeholder=''" onblur="this.placeholder='Enter your password'">
+                </div>
+                <div id="login-error" class="alert alert-danger" role="alert">
+                    Invalid email or password.
+                </div>
+                <button type="submit" class="btn btn-primary w-100 fw-bold">Login</button>
+            </form>
+            <div class="text-center mt-3">
+                <p>Don't have an account? <a href="#" id="show-signup">Sign up here</a></p>
+            </div>
+        </div>
+
+        <!-- Signup Form -->
+        <div id="signup-form-container">
+            <h3 class="form-title">Sign Up</h3>
+            <form id="signup-form">
+                <div class="mb-3">
+                    <label for="signup-name" class="form-label">Full Name</label>
+                    <input type="text" class="form-control" id="signup-name" required placeholder="John Doe" onfocus="this.placeholder=''" onblur="this.placeholder='John Doe'">
+                </div>
+                <div class="mb-3">
+                    <label for="signup-email" class="form-label">Email address</label>
+                    <input type="email" class="form-control" id="signup-email" required placeholder="name@example.com" onfocus="this.placeholder=''" onblur="this.placeholder='name@example.com'">
+                </div>
+                <div class="mb-3">
+                    <label for="signup-password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="signup-password" required placeholder="Create a password" onfocus="this.placeholder=''" onblur="this.placeholder='Create a password'">
+                </div>
+                <button type="submit" class="btn btn-primary w-100 fw-bold">Sign Up</button>
+                <div id="signup-success" class="alert alert-success mt-3" role="alert">
+                    Account created successfully!
+                </div>
+            </form>
+            <div class="text-center mt-3">
+                <p>Already have an account? <a href="#" id="show-login">Login here</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const loginFormContainer = document.getElementById('login-form-container');
+        const signupFormContainer = document.getElementById('signup-form-container');
+        const showSignupLink = document.getElementById('show-signup');
+        const showLoginLink = document.getElementById('show-login');
+        const loginForm = document.getElementById('login-form');
+        const signupForm = document.getElementById('signup-form');
+        const loginError = document.getElementById('login-error');
+        const signupSuccess = document.getElementById('signup-success');
+
+        // Initially show login form and hide signup form
+        signupFormContainer.style.display = 'none';
+        
+        showSignupLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            loginFormContainer.style.display = 'none';
+            signupFormContainer.style.display = 'block';
+        });
+
+        showLoginLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            signupFormContainer.style.display = 'none';
+            loginFormContainer.style.display = 'block';
+        });
+
+        // Handle Login Submission
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            // Simple validation
+            if (email === 'test@example.com' && password === 'password123') {
+                // In a real app, this would redirect or show the next page
+                window.location.href = 'dashboard.html';
+            } else {
+                loginError.style.display = 'block';
+                setTimeout(() => {
+                    loginError.style.display = 'none';
+                }, 3000);
+            }
+        });
+
+        // Handle Signup Submission
+        signupForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('signup-name').value;
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+
+            // In a real app, you would send this to a backend for account creation
+            console.log('New user signup:', { name, email, password });
+
+            signupSuccess.style.display = 'block';
+            signupForm.reset();
+            setTimeout(() => {
+                signupSuccess.style.display = 'none';
+                // Switch back to login form after successful signup
+                signupFormContainer.style.display = 'none';
+                loginFormContainer.style.display = 'block';
+            }, 3000);
+        });
+    });
+</script>
+</body>
+</html>

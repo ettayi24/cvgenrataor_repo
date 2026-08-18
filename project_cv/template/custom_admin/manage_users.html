@@ -1,0 +1,42 @@
+{% extends "custom_admin/adminbase.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Manage Users</h2>
+    <div class="table-responsive">
+        <table class="table table-striped table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Full Name</th>
+                    <th>Email</th>
+                    <th>Created At</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ user.Full_Name }}</td>
+                    <td>{{ user.Email }}</td>
+                    <td>{{ user.created_at|date:"M d, Y" }}</td>
+                    <td>
+                        <a href="{% url 'view_user' user.User_id %}" class="btn btn-sm btn-info">
+                            <i class="fa-solid fa-eye"></i> View
+                        </a>
+                        <a href="{% url 'delete_user' user.User_id %}" class="btn btn-sm btn-danger">
+                            <i class="fa-solid fa-trash"></i> Delete
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center text-muted">No users found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

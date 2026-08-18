@@ -1,0 +1,277 @@
+{% load static %}
+{% block title %}{{ personal.First_Name }} {{ personal.Last_Name }} - CV{% endblock %}
+
+{% block content %}
+<!-- <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> -->
+
+<link rel="stylesheet" href="{% static 'css/poppins.css' %}">
+<link rel="stylesheet" href="{% static 'css/fontawesome.css' %}">
+
+
+<style>
+.cv-timeline {
+  max-width: 1100px;
+  margin: 40px auto;
+  background: #fff;
+  font-family: 'Poppins', sans-serif;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+/* Header */
+.cv-header {
+  background: linear-gradient(135deg, #1e3c72, #2a5298);
+  color: #fff;
+  padding: 40px;
+  text-align: center;
+}
+.cv-header img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid #fff;
+  margin-bottom: 15px;
+}
+.cv-header h1 {
+  font-size: 28px;
+  margin: 0;
+}
+.cv-header h4 {
+  font-size: 16px;
+  font-weight: 400;
+  margin: 5px 0 0;
+}
+
+/* Layout */
+.cv-body {
+  display: grid;
+  grid-template-columns: 30% 70%;
+}
+.cv-left {
+  background: #f8f9fa;
+  padding: 30px 25px;
+}
+.cv-left h3 {
+  font-size: 15px;
+  text-transform: uppercase;
+  margin: 20px 0 10px;
+  color: #1e3c72;
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 5px;
+}
+.cv-left ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.cv-left ul li {
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+.cv-left .tags span {
+  display: inline-block;
+  background: #e4e7eb;
+  color: #333;
+  padding: 4px 10px;
+  margin: 3px 3px 0 0;
+  border-radius: 12px;
+  font-size: 12px;
+}
+
+/* Right Timeline */
+.cv-right {
+  padding: 35px;
+}
+.cv-right h3 {
+  font-size: 16px;
+  text-transform: uppercase;
+  color: #1e3c72;
+  margin: 25px 0 15px;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 6px;
+}
+.timeline {
+  position: relative;
+  margin-left: 20px;
+  padding-left: 20px;
+  border-left: 2px solid #1e3c72;
+}
+.timeline .item {
+  margin-bottom: 25px;
+  position: relative;
+  padding: 6px 0;
+  transition: 0.3s;
+}
+.timeline .item:hover {
+  background: #f9f9ff;
+  border-radius: 6px;
+  padding-left: 10px;
+}
+
+/* Timeline Dots with Font Awesome */
+.timeline .item::before {
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  content: "\f111"; /* fa-circle */
+  position: absolute;
+  left: -32px;
+  top: 4px;
+  font-size: 14px;
+  color: #1e3c72;
+}
+
+/* Color-coded sections */
+.timeline.experience .item::before {
+  color: #1e3c72; /* Blue */
+}
+.timeline.education .item::before {
+  color: #28a745; /* Green */
+}
+
+.timeline .item h4 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #222;
+}
+.timeline .item span {
+  font-size: 12px;
+  color: #666;
+}
+.timeline .item p {
+  font-size: 13px;
+  margin: 3px 0;
+  color: #444;
+}
+.cv-right .block {
+  margin-bottom: 20px;
+}
+.cv-right a {
+  color: #1e3c72;
+  font-size: 13px;
+  text-decoration: none;
+}
+.cv-right a:hover {
+  text-decoration: underline;
+}
+</style>
+
+<div class="cv-timeline">
+  <!-- Header -->
+  <div class="cv-header">
+    {% if personal.Profile_Image %}
+      <img src="{{ personal.Profile_Image.url }}" alt="Profile Photo">
+    {% else %}
+      <img src="{% static 'images/default_profile2.jpg' %}" alt="Profile Photo">
+    {% endif %}
+    <h1>{{ personal.First_Name }} {{ personal.Last_Name }}</h1>
+    <h4>{{ personal.Designation }}</h4>
+  </div>
+
+  <!-- Body -->
+  <div class="cv-body">
+    <!-- Left Column -->
+    <div class="cv-left">
+      <h3>Contact</h3>
+      <ul>
+        <li>{{ personal.Email }}</li>
+        <li>{{ personal.Contact }}</li>
+        <li>{{ personal.Address }}</li>
+        {% if personal.linked_in %}<li><a href="{{ personal.linked_in }}" target="_blank">LinkedIn</a></li>{% endif %}
+        {% if personal.github %}<li><a href="{{ personal.github }}" target="_blank">GitHub</a></li>{% endif %}
+      </ul>
+
+      <h3>Skills</h3>
+      <div class="tags">
+        {% for skill in skills %}
+          <span>{{ skill.Skill_Name }}</span>
+        {% empty %}
+          <p>No skills listed.</p>
+        {% endfor %}
+      </div>
+
+      <h3>Languages</h3>
+      <ul>
+        {% for lang in languages %}
+          <li>{{ lang.Language_Name }} – {{ lang.Proficiency }}</li>
+        {% empty %}
+          <li>No languages.</li>
+        {% endfor %}
+      </ul>
+
+      <h3>Interests</h3>
+      <ul>
+        {% for i in interests %}
+          <li>{{ i.Interest_Name }}</li>
+        {% empty %}
+          <li>No interests listed.</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <!-- Right Column -->
+    <div class="cv-right">
+      <h3>Experience</h3>
+      <div class="timeline experience">
+        {% for exp in experience %}
+          <div class="item">
+            <h4>{{ exp.Designation }} – {{ exp.Company_Name }}</h4>
+            <span>{{ exp.Start_date|date:"M Y" }} – {{ exp.End_date|date:"M Y" }}</span>
+            <p>{{ exp.Description }}</p>
+          </div>
+        {% empty %}
+          <p>No experience added.</p>
+        {% endfor %}
+      </div>
+
+      <h3>Education</h3>
+      <div class="timeline education">
+        {% for edu in education %}
+          <div class="item">
+            <h4>{{ edu.Degree }} – {{ edu.University }}</h4>
+            <span>{{ edu.Start_year }} – {{ edu.End_year }}</span>
+            <p>{{ edu.Description }}</p>
+          </div>
+        {% empty %}
+          <p>No education details.</p>
+        {% endfor %}
+      </div>
+
+      <h3>Projects</h3>
+      {% for proj in projects %}
+        <div class="block">
+          <h4>{{ proj.Project_Name }}</h4>
+          <p>{{ proj.Description }}</p>
+          {% if proj.Link %}<a href="{{ proj.Link }}" target="_blank">View Project</a>{% endif %}
+        </div>
+      {% empty %}
+        <p>No projects listed.</p>
+      {% endfor %}
+
+      <h3>Certificates</h3>
+      {% for cert in certificates %}
+        <div class="block">
+          <h4>{{ cert.Certificate_Name }}</h4>
+          <span>{{ cert.Organization }} – {{ cert.Year }}</span>
+        </div>
+      {% empty %}
+        <p>No certificates added.</p>
+      {% endfor %}
+
+      <h3>References</h3>
+      {% for ref in references %}
+        <div class="block">
+          <h4>{{ ref.Reference_Name }}</h4>
+          <span>{{ ref.Designation }}, {{ ref.Comapany }}</span>
+          <p>Contact: {{ ref.Contact }} | {{ ref.Email }}</p>
+        </div>
+      {% empty %}
+        <p>No references available.</p>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

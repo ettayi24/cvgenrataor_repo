@@ -1,0 +1,175 @@
+{% load static %}
+{% block content %}
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+.cv-docx {
+  display: flex;
+  max-width: 1000px;
+  margin: 30px auto;
+  font-family: 'Poppins', sans-serif;
+  border: 1px solid #ddd;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* Sidebar */
+.cv-docx .sidebar {
+  width: 30%;
+  background: #006d77; /* Teal Green */
+  color: #fff;
+  padding: 40px 25px;
+  text-align: center;
+}
+.cv-docx .sidebar img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  margin-bottom: 15px;
+}
+.cv-docx .sidebar h1 {
+  font-size: 20px;
+  margin: 10px 0 5px;
+}
+.cv-docx .sidebar p {
+  font-size: 13px;
+  margin: 4px 0;
+}
+.cv-docx .sidebar h2 {
+  font-size: 14px;
+  margin: 20px 0 10px;
+  text-transform: uppercase;
+  border-bottom: 2px solid #83c5be; /* Light accent */
+  padding-bottom: 4px;
+  text-align: left;
+}
+.cv-docx .sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+}
+.cv-docx .sidebar li {
+  font-size: 13px;
+  margin: 4px 0;
+}
+
+/* Main */
+.cv-docx .main {
+  width: 70%;
+  background: #fff;
+  padding: 40px 30px;
+}
+.cv-docx .main h2 {
+  font-size: 16px;
+  margin: 25px 0 10px;
+  text-transform: uppercase;
+  border-bottom: 2px solid #006d77;
+  padding-bottom: 4px;
+}
+.cv-docx .item {
+  margin-bottom: 15px;
+}
+.cv-docx .item h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+.cv-docx .item span {
+  font-size: 12px;
+  color: #555;
+  display: block;
+}
+.cv-docx .item p {
+  font-size: 13px;
+  margin: 4px 0;
+}
+
+
+</style>
+
+<div class="cv-docx">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    {% if personal.Profile_Image %}
+      <img src="{{ personal.Profile_Image.url }}" alt="Profile">
+    {% else %}
+      <img src="{% static 'images/default_profile.png' %}" alt="Profile">
+    {% endif %}
+    <h1>{{ personal.First_Name }} {{ personal.Last_Name }}</h1>
+    <p>{{ personal.Email }}</p>
+    <p>{{ personal.Contact }}</p>
+    <p>{{ personal.Address }}</p>
+    {% if personal.linked_in %}<p><a href="{{ personal.linked_in }}" target="_blank" style="color:#83c5be;">LinkedIn</a></p>{% endif %}
+    {% if personal.github %}<p><a href="{{ personal.github }}" target="_blank" style="color:#83c5be;">GitHub</a></p>{% endif %}
+
+    <h2>Skills</h2>
+    <ul>
+      {% for skill in skills %}
+        <li>{{ skill.Skill_Name }} ({{ skill.Proficiency_level }})</li>
+      {% empty %}<li>No skills added.</li>{% endfor %}
+    </ul>
+
+    <h2>Languages</h2>
+    <ul>
+      {% for lang in languages %}
+        <li>{{ lang.Language_Name }} ({{ lang.Proficiency }})</li>
+      {% empty %}<li>No languages added.</li>{% endfor %}
+    </ul>
+
+    <h2>Interests</h2>
+    <ul>
+      {% for i in interests %}
+        <li>{{ i.Interest_Name }}</li>
+      {% empty %}<li>No interests.</li>{% endfor %}
+    </ul>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+    <h2>Experience</h2>
+    {% for exp in experience %}
+      <div class="item">
+        <h3>{{ exp.Company_Name }}</h3>
+        <span>{{ exp.Start_date|date:"M Y" }} - {% if exp.End_date %}{{ exp.End_date|date:"M Y" }}{% else %}Present{% endif %}</span>
+        <p>{{ exp.Description }}</p>
+      </div>
+    {% empty %}<p>No work experience available.</p>{% endfor %}
+
+    <h2>Education</h2>
+    {% for edu in education %}
+      <div class="item">
+        <h3>{{ edu.Degree }}</h3>
+        <span>{{ edu.University }} | {{ edu.Start_year }} - {% if edu.End_year %}{{ edu.End_year }}{% else %}Present{% endif %}</span>
+        <p>{{ edu.Description }}</p>
+      </div>
+    {% empty %}<p>No education details available.</p>{% endfor %}
+
+    <h2>Projects</h2>
+    {% for proj in projects %}
+      <div class="item">
+        <h3>{{ proj.Project_Name }}</h3>
+        <p>{{ proj.Description }}</p>
+        {% if proj.Link %}<a href="{{ proj.Link }}" target="_blank">View Project</a>{% endif %}
+      </div>
+    {% empty %}<p>No projects available.</p>{% endfor %}
+
+    <h2>Certificates</h2>
+    {% for cert in certificates %}
+      <div class="item">
+        <h3>{{ cert.Certificate_Name }}</h3>
+        <span>{{ cert.Organization }} ({{ cert.Year }})</span>
+      </div>
+    {% empty %}<p>No certificates available.</p>{% endfor %}
+
+    <h2>References</h2>
+    {% for ref in references %}
+      <div class="item">
+        <h3>{{ ref.Reference_Name }}</h3>
+        <span>{{ ref.Designation }}, {{ ref.Company }}</span>
+        <p>Contact: {{ ref.Contact }} | {{ ref.Email }}</p>
+      </div>
+    {% empty %}<p>No references available.</p>{% endfor %}
+  </main>
+</div>
+{% endblock %}

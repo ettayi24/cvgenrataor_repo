@@ -1,0 +1,195 @@
+{% extends "forms/cv_form_base.html" %}
+
+{% block content %}
+{% with title="Skills" button_text="Next" step=5 progress=50 %}
+
+<style>
+    /* Form row layout */
+    .form-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        gap: 15px;
+        margin-bottom: 20px;
+        background-color: #f7f9fc;
+        border: 1px solid #e0e4eb;
+        border-radius: 12px;
+        padding: 20px;
+        position: relative;
+    }
+
+    .form-group {
+        flex: 1;
+        min-width: 200px;
+        margin: 0;
+    }
+
+    /* Remove (trash) button */
+    .remove-form {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: rgba(231, 76, 60, 0.15);
+        border: 1px solid rgba(231, 76, 60, 0.3);
+        color: #c0392b;
+        padding: 6px 10px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .remove-form:hover { background: rgba(231, 76, 60, 0.25); transform: scale(1.05); }
+
+    /* Add button (glass green style) */
+    #add-form {
+        background: rgba(144, 238, 144, 0.25);
+        border: 1px solid rgba(144, 238, 144, 0.4);
+        color: #1a5e27;
+        padding: 8px 15px;
+        font-size: 14px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.3s, transform 0.2s;
+        font-weight: 500;
+        margin-bottom: 20px;
+        display: inline-block;
+        backdrop-filter: blur(3px);
+    }
+    #add-form:hover { background: rgba(144, 238, 144, 0.45); transform: translateY(-2px); }
+
+    .form-row .delete-checkbox-hidden { display: none; }
+</style>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+<form method="post">
+    {% csrf_token %}
+    {{ formset.management_form }}
+
+    <div id="form-container">
+        {% for form in formset %}
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="{{ form.Skill_Name.id_for_label }}">Skill Name</label>
+                    {{ form.Skill_Name }}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.Proficiency_level.id_for_label }}">Proficiency</label>
+                    {{ form.Proficiency_level }}
+                </div>
+                <!-- Hidden ID and DELETE fields -->
+                {{ form.id }}
+                <div class="delete-checkbox-hidden">
+                    {{ form.DELETE }}
+                </div>
+                <button type="button" class="remove-form" aria-label="Remove this entry">
+                    <i class="fas fa-trash-alt"></i>
+                </button>
+            </div>
+        {% endfor %}
+    </div>
+
+    <button type="button" id="add-form">+ Add Another Skill</button>
+
+    <div class="button-container">
+        <!-- Previous -->
+    <a href="{% url 'add_experience' cv.CV_id %}" 
+       class="btn btn-secondary">
+       Previous
+    </a>
+
+    <!-- Skip -->
+    <a href="{% url 'add_language' cv.CV_id %}" 
+       class="btn btn-info">
+       Skip
+    </a>
+
+    <!-- Save -->
+    <button type="submit"
+            name="action"
+            value="save"
+            class="btn btn-primary">
+        Save & Next
+    </button>
+    
+    <!-- cancel -->
+    <button type="submit"
+            name="action"
+            value="cancel"
+            onclick="return confirm('Are you sure you want to cancel?');"
+            class="btn btn-danger" formnovalidate>
+            Cancel
+    </button>
+    </div>
+</form>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const formContainer = document.getElementById("form-container");
+    const addBtn = document.getElementById("add-form");
+    const totalForms = document.getElementById("id_form-TOTAL_FORMS");
+
+    const emptyFormHtml = `
+        <div class="form-row">
+            <div class="form-group">
+                <label for="id_form-__prefix__-Skill_Name">Skill Name</label>
+                <input type="text" name="form-__prefix__-Skill_Name" class="form-control" placeholder="Skill Name" required id="id_form-__prefix__-Skill_Name">
+            </div>
+            <div class="form-group">
+                <label for="id_form-__prefix__-Proficiency_level">Proficiency</label>
+                <select name="form-__prefix__-Proficiency_level" class="form-control" id="id_form-__prefix__-Proficiency_level">
+                    <option value="" selected>Select</option>
+                    <option value="Beginner">Beginner</option>
+                    <option value="Intermediate">Intermediate</option>
+                    <option value="Advanced">Advanced</option>
+                    <option value="Expert">Expert</option>
+                </select>
+            </div>
+            <input type="hidden" name="form-__prefix__-id" id="id_form-__prefix__-id">
+            <div class="delete-checkbox-hidden">
+                <input type="checkbox" name="form-__prefix__-DELETE" id="id_form-__prefix__-DELETE">
+            </div>
+            <button type="button" class="remove-form" aria-label="Remove this entry">
+                <i class="fas fa-trash-alt"></i>
+            </button>
+        </div>
+    `;
+
+    function attachRemoveHandlers() {
+        document.querySelectorAll(".remove-form").forEach(btn => {
+            btn.onclick = () => {
+                const formRow = btn.closest(".form-row");
+                const deleteBox = formRow.querySelector("input[type='checkbox'][name$='-DELETE']");
+                if (deleteBox) {
+                    deleteBox.checked = true;
+                    formRow.style.display = "none";
+                } else {
+                    formRow.remove();
+                    totalForms.value = parseInt(totalForms.value) - 1;
+                }
+            };
+        });
+    }
+
+    addBtn.addEventListener("click", () => {
+        let formCount = parseInt(totalForms.value);
+        let newDiv = document.createElement("div");
+        newDiv.innerHTML = emptyFormHtml.replace(/__prefix__/g, formCount);
+
+        const newForm = newDiv.firstElementChild;
+        formContainer.appendChild(newForm);
+
+        totalForms.value = formCount + 1;
+        attachRemoveHandlers();
+    });
+
+    attachRemoveHandlers();
+});
+
+</script>
+
+{% endwith %}
+{% endblock %}

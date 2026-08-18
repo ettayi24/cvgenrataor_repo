@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #2c5364;
+            --secondary-color: #0f2027;
+            --background-start: #e9f1f7;
+            --background-end: #dbe4eb;
+            --card-bg: #ffffff;
+            --text-color: #343a40;
+            --subtle-text: #6c757d;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--background-start), var(--background-end));
+            font-family: 'Inter', sans-serif;
+            padding: 2rem;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 460px;
+            background: var(--card-bg);
+            border-radius: 1.5rem;
+            box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.12);
+            padding: 2.5rem;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.5s ease-in-out;
+        }
+
+        .login-card:hover {
+            transform: translateY(-0.4rem) scale(1.01);
+            box-shadow: 0 1.5rem 3.5rem rgba(0, 0, 0, 0.18);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-header i {
+            font-size: 3.5rem;
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+            transition: color 0.3s ease;
+        }
+
+        .login-header h3 {
+            font-weight: 700;
+            color: var(--text-color);
+            margin-top: 0.5rem;
+            letter-spacing: -0.5px;
+        }
+        
+        .login-header p {
+            font-weight: 500;
+            color: var(--subtle-text);
+            font-size: 0.95rem;
+        }
+
+        .form-control {
+            border-radius: 0.75rem;
+            padding: 0.85rem 1.25rem;
+            border: 1px solid #dee2e6;
+            transition: all 0.35s ease-in-out;
+            background-color: #fff;
+        }
+
+        .form-control:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0.4rem rgba(44, 83, 100, 0.2);
+            transform: scale(1.01);
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0.6rem rgba(44, 83, 100, 0.3);
+            transform: scale(1.015);
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .btn-login {
+            background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
+            border: none;
+            border-radius: 0.75rem;
+            padding: 0.85rem;
+            font-weight: 600;
+            transition: all 0.3s ease-in-out;
+            color: #fff;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-login:hover {
+            opacity: 0.95;
+            transform: scale(1.03);
+            box-shadow: 0 0.75rem 1.75rem rgba(44, 83, 100, 0.35);
+        }
+
+        .extra-links {
+            margin-top: 1.5rem;
+            font-size: 0.875rem;
+            text-align: center;
+        }
+
+        .extra-links a {
+            color: var(--subtle-text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .extra-links a:hover {
+            color: var(--primary-color);
+            text-decoration: underline;
+        }
+
+        @media (max-width: 576px) {
+            .login-card {
+                padding: 1.75rem;
+            }
+            .login-header i {
+                font-size: 2.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-card">
+        <div class="login-header">
+            <i class="fa-solid fa-user-shield"></i>
+            <h3>Admin Login</h3>
+            <p>Welcome back! Please sign in to continue.</p>
+        </div>
+        <form method="POST" action="{% url 'adminlogin' %}">
+            {% csrf_token %}
+            <div class="mb-4">
+                <label for="username" class="form-label">Username</label>
+                <input type="email" class="form-control" id="username" name="username" placeholder="Enter your username" required>
+            </div>
+            <div class="mb-4">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
+            </div>
+            <button type="submit" class="btn btn-login w-100">Login</button>
+        </form>
+        <div class="extra-links">
+            <a href="#">Forgot password?</a> • <a href="{% url 'adminsignup' %}">Create an account</a>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

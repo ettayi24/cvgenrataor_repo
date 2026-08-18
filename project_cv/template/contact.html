@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block title %}Contact Us | CV Generator{% endblock %}
+
+{% block content %}
+<style>
+    /* Contact Page */
+.contact-container {
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.contact-container h2 {
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 1.8rem;
+  color: #111827;
+}
+
+.contact-desc {
+  text-align: center;
+  color: #6b7280;
+  margin-bottom: 25px;
+  font-size: 0.95rem;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.contact-form label {
+  font-weight: 600;
+  color: #374151;
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59,130,246,0.2);
+  outline: none;
+}
+
+.contact-form button {
+  padding: 14px;
+  background: #3b82f6;
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.contact-form button:hover {
+  background: #2563eb;
+  transform: translateY(-2px);
+}
+
+</style>
+<div class="contact-container">
+  <h2>Contact Us</h2>
+  <p class="contact-desc">
+    Have questions or feedback? Fill out the form and we’ll get back to you soon.
+  </p>
+
+  <form method="post" class="contact-form">
+    {% csrf_token %}
+    
+    <label for="name">Your Name</label>
+    <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+
+    <label for="email">Email Address</label>
+    <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
+    <label for="subject">Subject</label>
+    <input type="text" id="subject" name="subject" placeholder="Enter subject" required>
+
+    <label for="message">Message</label>
+    <textarea id="message" name="message" rows="5" placeholder="Write your message..." required></textarea>
+
+    <button type="submit">✉ Send Message</button>
+  </form>
+</div>
+{% endblock %}

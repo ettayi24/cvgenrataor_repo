@@ -1,0 +1,56 @@
+{% extends "forms/cv_form_base.html" %}
+
+{% block content %}
+<style>
+    /* Standardized form layout */
+    .form-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+    .form-row .form-group {
+        flex-grow: 1;
+        margin: 0;
+    }
+</style>
+
+<!-- <form method="post">
+    {% csrf_token %} -->
+
+    <div class="form-group">
+        <label for="{{ form.CV_Name.id_for_label }}">CV Title</label>
+        {{ form.CV_Name }}
+        {% if form.CV_Name.errors %}
+            <ul class="errorlist">
+                {% for error in form.CV_Name.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+
+    <div class="form-group">
+        <label for="{{ form.Template_id.id_for_label }}">Select Template</label>
+        {{ form.Template_id }}
+        {% if form.Template_id.errors %}
+            <ul class="errorlist">
+                {% for error in form.Template_id.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+
+    <div class="button-container" style="text-align: center;">
+        <button type="submit" name="next" class="btn btn-primary">Next</button>
+        <button type="submit"
+            name="action"
+            value="cancel"
+            onclick="return confirm('Are you sure you want to cancel?');"
+            class="btn btn-danger" formnovalidate>
+            Cancel
+        </button>
+    </div>
+<!-- </form> -->
+{% endblock %}

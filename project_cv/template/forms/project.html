@@ -1,0 +1,219 @@
+{% extends "forms/cv_form_base.html" %}
+
+{% block content %}
+{% with title="Projects" button_text="Next" step=6 progress=60 %}
+
+<style>
+    /* Form row layout */
+    .form-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        gap: 15px;
+        margin-bottom: 20px;
+        background-color: #f7f9fc;
+        border: 1px solid #e0e4eb;
+        border-radius: 12px;
+        padding: 20px;
+        position: relative;
+    }
+
+    /* Standard form group */
+    .form-group {
+        flex: 1;
+        min-width: 200px;
+        margin: 0;
+    }
+
+    /* Fields taking full width */
+    .form-group.full-width {
+        flex-basis: 100%;
+    }
+
+    /* Remove (trash) button */
+    .remove-form {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: rgba(231, 76, 60, 0.15);
+        border: 1px solid rgba(231, 76, 60, 0.3);
+        color: #c0392b;
+        padding: 6px 10px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .remove-form:hover {
+        background: rgba(231, 76, 60, 0.25);
+        transform: scale(1.05);
+    }
+
+    /* Add button (glass green style) */
+    #add-form {
+        background: rgba(144, 238, 144, 0.25);
+        border: 1px solid rgba(144, 238, 144, 0.4);
+        color: #1a5e27;
+        padding: 8px 15px;
+        font-size: 14px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.3s, transform 0.2s;
+        font-weight: 500;
+        margin-bottom: 20px;
+        display: inline-block;
+        backdrop-filter: blur(3px);
+    }
+
+    #add-form:hover {
+        background: rgba(144, 238, 144, 0.45);
+        transform: translateY(-2px);
+    }
+
+    /* Hide the default Django delete checkbox and its label */
+    .form-row .delete-checkbox-hidden {
+        display: none;
+    }
+</style>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+
+<form method="post">
+    {% csrf_token %}
+    {{ formset.management_form }}
+
+    <div id="form-container">
+        {% for form in formset %}
+            <div class="form-row">
+                <div class="form-group full-width">
+                    <label for="{{ form.Project_Name.id_for_label }}">Project Name</label>
+                    {{ form.Project_Name }}
+                </div>
+                <div class="form-group full-width">
+                    <label for="{{ form.Description.id_for_label }}">Description</label>
+                    {{ form.Description }}
+                </div>
+                <div class="form-group full-width">
+                    <label for="{{ form.Link.id_for_label }}">Link</label>
+                    {{ form.Link }}
+                </div>
+                {{ form.id }}
+                <div class="delete-checkbox-hidden">
+                    {{ form.DELETE }}
+                </div>
+                <button type="button" class="remove-form" aria-label="Remove this project">
+                    <i class="fas fa-trash-alt"></i>
+                </button>
+            </div>
+        {% endfor %}
+    </div>
+
+    <button type="button" id="add-form">+ Add Another Project</button>
+
+    <div class="button-container">
+        <!-- Previous -->
+    <a href="{% url 'add_certificate' cv.CV_id %}" 
+       class="btn btn-secondary">
+       Previous
+    </a>
+
+    <!-- Skip -->
+    <a href="{% url 'add_interest' cv.CV_id %}" 
+       class="btn btn-info">
+       Skip
+    </a>
+
+    <!-- Save -->
+    <button type="submit"
+            name="action"
+            value="save"
+            class="btn btn-primary">
+        Save & Next
+    </button>
+    
+    <!-- cancel -->
+    <button type="submit"
+            name="action"
+            value="cancel"
+            onclick="return confirm('Are you sure you want to cancel?');"
+            class="btn btn-danger" formnovalidate>
+            Cancel
+    </button>
+    </div>
+</form>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const formContainer = document.getElementById("form-container");
+    const addBtn = document.getElementById("add-form");
+    const totalForms = document.getElementById("id_form-TOTAL_FORMS");
+    const emptyFormHtml = `
+        <div class="form-row">
+            <div class="form-group full-width">
+                <label for="id_form-__prefix__-Project_Name">Project Name</label>
+                <input type="text" name="form-__prefix__-Project_Name" placeholder="Project Name" required id="id_form-__prefix__-Project_Name" class="form-control">
+            </div>
+            <div class="form-group full-width">
+                <label for="id_form-__prefix__-Description">Description</label>
+                <textarea name="form-__prefix__-Description" placeholder="Description" rows="4" id="id_form-__prefix__-Description" class="form-control"></textarea>
+            </div>
+            <div class="form-group full-width">
+                <label for="id_form-__prefix__-Link">Link</label>
+                <input type="url" name="form-__prefix__-Link" placeholder="Project URL" id="id_form-__prefix__-Link" class="form-control">
+            </div>
+            <input type="hidden" name="form-__prefix__-id" id="id_form-__prefix__-id">
+            <div class="delete-checkbox-hidden">
+                <input type="checkbox" name="form-__prefix__-DELETE" id="id_form-__prefix__-DELETE">
+            </div>
+            <button type="button" class="remove-form" aria-label="Remove this project">
+                <i class="fas fa-trash-alt"></i>
+            </button>
+        </div>
+    `;
+
+    function attachRemoveHandlers() {
+        document.querySelectorAll(".remove-form").forEach(btn => {
+            btn.onclick = () => {
+                const formRow = btn.closest(".form-row");
+                const formIdInput = formRow.querySelector("input[name$='-id']");
+                
+                // If the form has an ID value, it's an existing object. Hide it and mark for deletion.
+                if (formIdInput && formIdInput.value) {
+                    const deleteBox = formRow.querySelector("input[type='checkbox'][name$='-DELETE']");
+                    if (deleteBox) {
+                        deleteBox.checked = true; // Check the box to mark for deletion
+                        formRow.style.display = "none";
+                    }
+                } else {
+                    // If the form has no ID, it's a new, unsaved form. Remove it from the DOM.
+                    formRow.remove();
+                    // Update the TOTAL_FORMS count
+                    let formCount = document.querySelectorAll("#form-container .form-row").length;
+                    totalForms.value = formCount;
+                }
+            };
+        });
+    }
+
+    addBtn.addEventListener("click", () => {
+        let formCount = parseInt(totalForms.value);
+        let newFormRow = document.createElement("div");
+        newFormRow.innerHTML = emptyFormHtml.replace(/__prefix__/g, formCount);
+        
+        // Append the new form row element
+        formContainer.appendChild(newFormRow.firstElementChild);
+        totalForms.value = formCount + 1;
+        attachRemoveHandlers();
+    });
+
+    attachRemoveHandlers();
+});
+</script>
+
+{% endwith %}
+{% endblock %}

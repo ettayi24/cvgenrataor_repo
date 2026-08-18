@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Sign Up - CV Generator{% endblock %}
+
+{% block content %}
+<section class="signup-section">
+  <div class="signup-box">
+    <h2>Create an Account</h2>
+    <form method="post">
+      {% csrf_token %}
+      <input type="text" name="username" placeholder="Username" required />
+      <input type="email" name="email" placeholder="Email Address" required />
+      <input type="password" name="password" placeholder="Password" required />
+      <button type="submit">Sign Up</button>
+    </form>
+    <p class="alt-link">
+      Already have an account? <a href="{% url 'home' %}#login">Login here</a>
+    </p>
+  </div>
+</section>
+{% endblock %}

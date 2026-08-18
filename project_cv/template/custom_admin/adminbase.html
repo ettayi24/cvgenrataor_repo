@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin Panel{% endblock %}</title>
+    
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        body {
+            background-color: #f4f6f9;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            min-height: 100vh;
+            background: linear-gradient(180deg, #212529, #343a40);
+            color: #fff;
+            box-shadow: 2px 0 8px rgba(0,0,0,0.2);
+        }
+
+        .sidebar h4 {
+            font-weight: 700;
+            color: #f8f9fa;
+            margin-bottom: 1rem;
+        }
+
+        .sidebar hr {
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .sidebar .nav-link {
+            color: #adb5bd;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-radius: 8px;
+            padding: 10px 15px;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar .nav-link i {
+            font-size: 1.1rem;
+        }
+
+        .sidebar .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            transform: translateX(5px);
+        }
+
+        .sidebar .nav-link.active {
+            background: linear-gradient(90deg, #0d6efd, #4dabf7);
+            color: #fff;
+            box-shadow: 0 2px 6px rgba(13, 110, 253, 0.4);
+        }
+
+        /* Main content */
+        .content {
+            padding: 30px;
+        }
+
+        /* Buttons inside dashboard pages */
+        .btn-custom {
+            background: linear-gradient(45deg, #0d6efd, #4dabf7);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            padding: 12px 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .btn-custom:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 6px 15px rgba(13,110,253,0.3);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class="row">
+
+        <!-- Sidebar -->
+        <nav class="col-md-3 col-lg-2 d-md-block sidebar p-3">
+            <h4 class="text-center mb-4">
+                <i class="fa-solid fa-shield-halved me-2"></i>Admin Panel
+            </h4>
+            <hr>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link {% if request.path == '/admindashboard' %}active{% endif %}" href="{% url 'admindashboard' %}">
+                        <i class="fa-solid fa-house"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'adminsignup' %}">
+                        <i class="fa-solid fa-user-plus"></i> Add Admin
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="fa-solid fa-users-gear"></i> Manage Admins
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-danger" href="{% url 'adminlogout' %}">
+                        <i class="fa-solid fa-right-from-bracket"></i> Logout
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Main content -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 content">
+            {% block content %}
+            <!-- Page-specific content will appear here -->
+            {% endblock %}
+        </main>
+
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

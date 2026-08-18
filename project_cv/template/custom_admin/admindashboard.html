@@ -1,0 +1,62 @@
+{% extends "custom_admin/adminbase.html" %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <h2 class="mb-4 fw-bold">
+        <i class="fa-solid fa-gauge-high me-2 text-primary"></i> Admin Dashboard
+    </h2>
+
+    <div class="row g-4">
+        <!-- Add Template -->
+        <div class="col-md-6 col-lg-3">
+            <div class="card shadow-sm border-0 h-100 text-center p-4">
+                <i class="fa-solid fa-plus-circle fa-3x text-primary mb-3"></i>
+                <h5 class="fw-bold">Add Template</h5>
+                <p class="text-muted">Create and upload new CV templates.</p>
+                <a href="{% url 'admin_add_template' %}" class="btn btn-custom mt-2 w-100">
+                    <i class="fa-solid fa-plus me-2"></i> Add Template
+                </a>
+            </div>
+        </div>
+
+        <!-- Template Design View -->
+        <div class="col-md-6 col-lg-3">
+            <div class="card shadow-sm border-0 h-100 text-center p-4">
+                <i class="fa-solid fa-palette fa-3x text-success mb-3"></i>
+                <h5 class="fw-bold">Design View</h5>
+                <p class="text-muted">View and manage template designs.</p>
+                <a href="{% url 'templates' %}" class="btn btn-custom mt-2 w-100">
+                    <i class="fa-solid fa-eye me-2"></i> View Designs
+                </a>
+            </div>
+        </div>
+
+        <!-- CV Table of Users -->
+        <div class="col-md-6 col-lg-3">
+            <div class="card shadow-sm border-0 h-100 text-center p-4">
+                <i class="fa-solid fa-table fa-3x text-warning mb-3"></i>
+                <h5 class="fw-bold">CV Table</h5>
+                <p class="text-muted">Check CVs created by registered users.</p>
+                <a href="{% url 'admin_view_cvs' %}" class="btn btn-custom mt-2 w-100">
+                    <i class="fa-solid fa-database me-2"></i> View CVs
+                </a>
+            </div>
+        </div>
+
+        <!-- Manage Users -->
+<div class="col-md-6 col-lg-3">
+    <div class="card shadow-sm border-0 h-100 text-center p-4">
+        <i class="fa-solid fa-users fa-3x text-primary mb-3"></i>
+        <h5 class="fw-bold">Manage Users</h5>
+        <p class="text-muted">View and manage all registered users.</p>
+        <a href="{% url 'admin_manage_users' %}" class="btn btn-custom mt-2 w-100">
+            <i class="fa-solid fa-user-gear me-2"></i>Manage Users
+        </a>
+    </div>
+</div>
+
+    </div>
+</div>
+{% endblock %}

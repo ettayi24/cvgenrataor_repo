@@ -1,0 +1,22 @@
+{% extends "custom_admin/adminbase.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4 text-danger">Confirm Delete</h2>
+
+    <div class="card p-4 shadow-sm">
+        <p>Are you sure you want to delete user <strong>{{ user.Full_Name }}</strong> (ID: {{ user.User_id }})?</p>
+        <p>This action cannot be undone.</p>
+
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">
+                <i class="fa-solid fa-trash"></i> Confirm Delete
+            </button>
+            <a href="{% url 'admin_manage_users' %}" class="btn btn-secondary">
+                <i class="fa-solid fa-arrow-left"></i> Cancel
+            </a>
+        </form>
+    </div>
+</div>
+{% endblock %}

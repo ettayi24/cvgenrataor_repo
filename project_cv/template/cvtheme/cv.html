@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load static %}
+
+<!-- {% block title %}{{ personal.First_Name }} {{ personal.Last_Name }} - CV{% endblock %} -->
+
+{% block content %}
+ <!-- 🔽 Download Button -->
+  <div class="d-flex justify-content-end mb-3">
+
+  {% if cv %}
+    <!-- CV exists -->
+    <a href="{% url 'download_cv' cv.CV_id selected_template %}"
+       class="btn btn-outline-primary">
+      <i class="fas fa-download"></i> Download CV
+    </a>
+  {% else %}
+    <!-- No CV -->
+    <a href="{% url 'create_cv' %}"
+       class="btn btn-success">
+      <i class="fas fa-plus"></i> Create CV
+    </a>
+  {% endif %}
+
+</div>
+
+  {% if selected_template %}
+  {% include "cvtheme/theme"|add:selected_template|add:".html" %}
+{% else %}
+  <p class="text-center text-gray-600">
+    ⚠️ No template selected. Please choose a CV template.
+  </p>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,84 @@
+{% extends "custom_admin/adminbase.html" %}
+{% block title %}View CVs{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-lg border-0">
+        <div class="card-header bg-gradient text-white" 
+             style="background: linear-gradient(45deg, #0f2027, #2c5364);">
+            <h4 class="mb-0">📋 All User CVs</h4>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+    <!-- Search form -->
+    <form method="get" class="d-flex">
+        <input type="text" name="search" class="form-control me-2"
+               placeholder="Search by CV name, user, or email"
+               value="{{ search }}">
+        <input type="text" name="template" class="form-control me-2"
+               placeholder="Filter by template name"
+               value="{{ template_filter }}">
+        <button type="submit" class="btn btn-primary">🔍 Search</button>
+    </form>
+
+    <!-- Order toggle -->
+    <div>
+        <a href="?order=newest&search={{ search }}&template={{ template_filter }}"
+           class="btn btn-sm {% if order == 'newest' %}btn-primary{% else %}btn-outline-primary{% endif %}">
+            Newest First
+        </a>
+        <a href="?order=oldest&search={{ search }}&template={{ template_filter }}"
+           class="btn btn-sm ms-2 {% if order == 'oldest' %}btn-primary{% else %}btn-outline-primary{% endif %}">
+            Oldest First
+        </a>
+    </div>
+</div>
+
+                <table class="table table-hover align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>User</th>
+                            <th>CV Name</th>
+                            <th>Template</th>
+                            <th>Created</th>
+                            <th>Updated</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for cv in cvs %}
+                        <tr>
+                            <td>{{ cv.CV_id }}</td>
+                            <td>{{ cv.User_id.Full_Name }}</td>
+                            <td>{{ cv.CV_Name }}</td>
+                            <td>{{ cv.Template_id.Template_Name }}</td>
+                            <td>{{ cv.Created_at|date:"Y-m-d H:i" }}</td>
+                            <td>{{ cv.Updated_at|date:"Y-m-d H:i" }}</td>
+                            <td>
+                                <a href="{% url 'admin_preview_cv' cv.CV_id cv.Template_id_id %}" 
+                                   class="btn btn-sm btn-primary shadow-sm me-2">
+                                    👁 Preview
+                                </a>
+                                <a href="{% url 'admin_delete_cv' cv.CV_id %}" 
+                                   class="btn btn-sm btn-danger shadow-sm"
+                                   onclick="return confirm('Are you sure you want to delete this CV?');">
+                                    🗑 Delete
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="7" class="text-center text-muted py-4">
+                                No CVs found yet.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

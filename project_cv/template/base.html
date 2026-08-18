@@ -1,0 +1,497 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{% block title %}CV Generator{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  <!-- Load Font Awesome (if not already included) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"> -->
+  
+  <style>
+  /* Default Navbar */
+.custom-navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.9rem 2rem;
+  background-color: #111827;
+  color: #f9fafb;
+  position: relative;   /* normal flow */
+  margin: 0 auto;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.6);
+  border-radius: 20px;
+  z-index: 10;
+  width: fit-content;
+  max-width: 90%;
+  transition: all 0.3s ease;  /* smooth change */
+}
+
+/* Floating Navbar after scroll */
+.custom-navbar.scrolled {
+  position: fixed;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%) scale(0.95); /* slight shrink */
+  z-index: 1000;
+  opacity: 0.95; /* subtle transparency */
+}
+
+
+
+
+/* Brand Logo */
+.brand-logo {
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: #facc15; /* amber/yellow accent */
+  text-decoration: none;
+  letter-spacing: 0.5px;
+  transition: color 0.3s ease;
+}
+.brand-logo:hover {
+  color: #38bdf8; /* cyan hover */
+}
+
+/* Hamburger (mobile) */
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  cursor: pointer;
+  color: #f9fafb;
+}
+
+/* Nav menu */
+.nav-menu {
+  display: flex;
+  gap: 1.8rem;
+  align-items: center;
+}
+
+/* Nav sections */
+.nav-left,
+.nav-right {
+  display: flex;
+  gap: 1.8rem;
+  align-items: center;
+}
+
+/* Links */
+.nav-item {
+  text-decoration: none;
+  color: #d1d5db; /* light gray */
+  font-weight: 500;
+  transition: color 0.3s ease, border-bottom 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding-bottom: 2px;
+}
+.nav-item:hover {
+  color: #38bdf8; /* cyan hover */
+  border-bottom: 2px solid #38bdf8;
+}
+
+/* User/Admin block */
+.nav-user {
+  text-decoration: none;
+  flex-direction: column;
+  gap: 0.2rem;
+  display: flex;
+  align-items: center;
+  transition: color 0.3s ease;
+}
+.nav-user .user-icon {
+  background-color: rgba(255,255,255,0.08);
+  padding: 0.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.nav-user .user-icon i {
+  font-size: 1.3rem;
+  color: #f9fafb;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+.nav-user span {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #e5e7eb;
+}
+.nav-user:hover .user-icon i {
+  transform: scale(1.1);
+  color: #38bdf8;
+}
+.nav-user:hover span {
+  color: #38bdf8;
+}
+
+/* Active Admin */
+.nav-user.active-admin span,
+.nav-user.active-admin .user-icon i {
+  color: #22c55e; /* green highlight */
+}
+
+/* Logout */
+.logout i {
+  font-size: 1.2rem;
+  color: #ef4444; /* red */
+  transition: transform 0.2s;
+}
+.logout:hover i {
+  transform: scale(1.15);
+  color: #dc2626;
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+  .hamburger {
+    display: block;
+  }
+  .nav-menu {
+    display: none;
+  }
+  .nav-menu.nav-menu-active {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: #1f2937; /* dark gray */
+    padding: 1rem 0;
+    z-index: 20;
+  }
+  .nav-left, .nav-right {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 0 1rem;
+  }
+  .nav-item, .nav-user {
+    width: 100%;
+    justify-content: center;
+    padding: 0.6rem 0;
+  }
+}
+
+.nav-item.active {
+    background-color: #3b82f6; /* blue background */
+    color: white;               /* text white */
+    border-radius: 12px;        /* keep rounded if navbar is rounded */
+    padding: 0.5rem 1rem;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.nav-item.active:hover {
+    background-color: #2563eb; /* darker blue on hover */
+}
+
+
+/* Floating / Curved Footer */
+.footer {
+  background-color: #111827;
+  color: #f9fafb;
+  padding: 3rem 1rem 1rem;
+  font-family: sans-serif;
+  border-radius: 30px 30px 0 0; /* curved top edges */
+  max-width: 1200px;
+  margin: 3rem auto 0; /* centered with spacing */
+  box-shadow: 0 -4px 15px rgba(0,0,0,0.3); /* floating effect */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover effect for subtle lift */
+.footer:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 -6px 20px rgba(0,0,0,0.4);
+}
+
+.footer-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.footer-brand h2 {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.footer-brand p {
+  font-size: 0.95rem;
+  color: #d1d5db;
+}
+
+.footer-links div {
+  min-width: 150px;
+}
+
+.footer-links h4 {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  color: #fff;
+}
+
+.footer-links ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links ul li {
+  margin-bottom: 0.4rem;
+}
+
+.footer-links ul li a {
+  color: #d1d5db;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-links ul li a:hover {
+  color: #3b82f6;
+}
+
+.social-icons a {
+  display: inline-block;
+  margin-right: 0.5rem;
+  font-size: 1.3rem;
+  color: #d1d5db;
+  transition: color 0.2s;
+}
+
+.social-icons a:hover {
+  color: #3b82f6;
+}
+
+.footer-bottom {
+  text-align: center;
+  margin-top: 2rem;
+  color: #9ca3af;
+  font-size: 0.9rem;
+  border-top: 1px solid #374151;
+  padding-top: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .footer-container {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.5rem;
+  }
+
+  .footer-links {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .social-icons {
+    justify-content: center;
+  }
+}
+
+/* Navbar Logo */
+.navbar-logo img {
+  height: 50px;       /* fits inside navbar */
+  width: auto;        /* maintain aspect ratio */
+  display: block;
+}
+
+/* Optional: adjust for smaller screens */
+@media (max-width: 768px) {
+  .navbar-logo img {
+    height: 40px;
+  }
+}
+
+
+</style>
+  
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <a href="{% url 'home' %}" class="navbar-logo">
+  <img src="{% static 'images/logo3.png' %}" alt="CV Generator Logo">
+</a>
+
+    <nav class="custom-navbar">
+    <button class="hamburger" id="hamburger-menu">
+        <i class="fa-solid fa-bars"></i>
+    </button>
+    <div class="nav-menu" id="nav-menu">
+        <div class="nav-left">
+            <a href="{% url 'home' %}" class="nav-item {% if request.path == '/' %}active{% endif %}">
+    <i class="fa-solid fa-house"></i> Home
+</a>
+
+<a href="{% url 'templates' %}" class="nav-item {% if request.path == '/templates/' %}active{% endif %}">
+    <i class="fa-solid fa-file-alt"></i> Templates
+</a>
+
+<a href="{% url 'about' %}" class="nav-item {% if request.path == '/about/' %}active{% endif %}">
+    <i class="fa-solid fa-circle-info"></i> About
+</a>
+
+<a href="{% url 'contact' %}" class="nav-item {% if request.path == '/contact/' %}active{% endif %}">
+    <i class="fa-solid fa-envelope"></i> Contact
+</a>
+
+        </div>
+        <div class="nav-right">
+            {% if request.session.user_id %}
+            <a href="{% url 'user_dashboard' %}" class="nav-user">
+                <div class="user-icon"><i class="fa-solid fa-user-circle"></i></div>
+                <span>{{ request.session.user_name }}</span>
+            </a>
+            <a href="{% url 'signout' %}" class="nav-item logout"><i class="fa-solid fa-right-from-bracket"></i></a>
+            {% endif %}
+
+            {% if request.session.admin_id %}
+            <a href="{% url 'admindashboard' %}" class="nav-user active-admin">
+                <div class="user-icon"><i class="fa-solid fa-user-shield"></i></div>
+                <span>{{ request.session.admin_name }} (Active)</span>
+            </a>
+            <a href="{% url 'adminlogout' %}" class="nav-item logout"><i class="fa-solid fa-right-from-bracket"></i></a>
+            {% else %}
+            <a href="{% url 'adminlogin' %}" class="nav-user nav-admin-default">
+                <div class="user-icon"><i class="fa-solid fa-user-shield"></i></div>
+                <span>Admin</span>
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</nav>
+
+
+  </header>
+
+  <!-- Main content -->
+  <main>
+    <!-- 🔔 Flash Messages -->
+    <!-- ✅ Django Messages -->
+{% if messages %}
+  <div class="messages-container" style="max-width:600px; margin:20px auto;">
+    {% for message in messages %}
+      <div 
+        class="alert {{ message.tags }}" 
+        style="
+          padding: 12px 16px;
+          margin-bottom: 12px;
+          border-radius: 8px;
+          font-size: 0.95rem;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        ">
+        <span>
+          {% if message.tags == 'success' %}✅{% elif message.tags == 'error' %}❌{% endif %}
+          {{ message }}
+        </span>
+        <button onclick="this.parentElement.remove()" 
+          style="background:none; border:none; font-size:1.2rem; cursor:pointer;">
+          ✖
+        </button>
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+    {% block content %}
+    <!-- content here -->
+    {% endblock %}
+  </main>
+
+  <!-- Stylish Footer Section -->
+<footer class="footer">
+  <div class="footer-container">
+    <div class="footer-brand">
+      <h2>CV Generator</h2>
+      <p>Build professional resumes in minutes.</p>
+    </div>
+
+    <div class="footer-links">
+      <div>
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="{% url 'home' %}">Home</a></li>
+          <li><a href="{% url 'templates' %}">Templates</a></li>
+          <li><a href="{% url 'about' %}">About</a></li>
+          <li><a href="{% url 'contact' %}">Contact</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Account</h4>
+        <ul>
+          {% if request.session.user_id %}
+          <li><a href="{% url 'signout' %}">Logout</a></li>
+          {% else %}
+          <li><a href="{% url 'signin' %}">Login</a></li>
+          <li><a href="{% url 'signup' %}">Sign Up</a></li>
+          {% endif %}
+        </ul>
+      </div>
+
+      <div>
+        <h4>Follow Us</h4>
+        <div class="social-icons">
+          <a href="#" target="_blank">🐦</a>
+          <a href="#" target="_blank">📘</a>
+          <a href="#" target="_blank">📸</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; {{ now.year }} CV Generator. All rights reserved.</p>
+  </div>
+</footer>
+
+<!-- Auto dismiss -->
+    <script>
+      setTimeout(() => {
+        document.querySelectorAll('.alert').forEach(el => el.remove());
+      }, 3000);
+
+
+      const hamburgerBtn = document.getElementById('hamburger-menu');
+    const navMenu = document.getElementById('nav-menu');
+
+    // Toggles the 'nav-menu-active' class to show/hide the menu
+    hamburgerBtn.addEventListener('click', () => {
+        navMenu.classList.toggle('nav-menu-active');
+    });
+
+    // Optional: Hide the menu when a link is clicked
+    document.querySelectorAll('.nav-menu a').forEach(link => {
+        link.addEventListener('click', () => {
+            navMenu.classList.remove('nav-menu-active');
+        });
+    });
+
+
+      window.addEventListener("scroll", function() {
+    const navbar = document.querySelector(".custom-navbar");
+    if (window.scrollY > 50) {
+      navbar.classList.add("scrolled");
+    } else {
+      navbar.classList.remove("scrolled");
+    }
+  });
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,212 @@
+{% extends "forms/cv_form_base.html" %}
+
+{% block content %}
+{% with title="Education" button_text="Next" step=3 progress=20 %}
+
+<style>
+    /* Form row layout */
+    .form-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+    .form-row .form-group {
+        flex: 1;
+        min-width: 200px; /* Ensures fields don't get too small on smaller screens */
+        margin: 0;
+    }
+
+    /* Remove (trash) button */
+    .remove-form {
+        background: rgba(231, 76, 60, 0.15);
+        border: 1px solid rgba(231, 76, 60, 0.3);
+        color: #c0392b;
+        padding: 6px 10px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        align-self: flex-start; /* Aligns with the top of the form fields */
+    }
+    .remove-form:hover {
+        background: rgba(231, 76, 60, 0.25);
+        transform: scale(1.05);
+    }
+
+    /* Add button (glass green style) */
+    #add-form {
+        background: rgba(144, 238, 144, 0.25);
+        border: 1px solid rgba(144, 238, 144, 0.4);
+        color: #1a5e27;
+        padding: 8px 15px;
+        font-size: 14px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.3s, transform 0.2s;
+        font-weight: 500;
+        margin-bottom: 20px;
+        display: inline-block;
+        backdrop-filter: blur(3px);
+    }
+    #add-form:hover {
+        background: rgba(144, 238, 144, 0.45);
+        transform: translateY(-2px);
+    }
+
+    /* Form control styling */
+    .form-control {
+        width: 100%;
+        padding: 8px;
+        border-radius: 4px;
+        border: 1px solid #ddd;
+    }
+</style>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+<!-- <form method="post">
+    {% csrf_token %} -->
+    {{ formset.management_form }}
+
+    <div id="form-container">
+        {% for form in formset %}
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="{{ form.Degree.id_for_label }}">Degree / Course</label>
+                    {{ form.Degree }}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.University.id_for_label }}">University / Institute</label>
+                    {{ form.University }}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.Start_year.id_for_label }}">Start Year</label>
+                    {{ form.Start_year }}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.End_year.id_for_label }}">End Year</label>
+                    {{ form.End_year }}
+                </div>
+                <div class="form-group w-100">
+                    <label for="{{ form.Description.id_for_label }}">Description</label>
+                    {{ form.Description }}
+                </div>
+                
+                {{ form.id }}
+                {{ form.DELETE }}
+                
+                <button type="button" class="remove-form" aria-label="Remove this entry">
+                    <i class="fas fa-trash-alt"></i>
+                </button>
+            </div>
+        {% endfor %}
+    </div>
+
+    <button type="button" id="add-form">+ Add Another Education</button>
+
+    <div class="button-container">
+
+    <!-- Previous -->
+    <a href="{% url 'add_personal_details' cv.CV_id %}" 
+       class="btn btn-secondary">
+       Previous
+    </a>
+
+    <!-- Skip -->
+    <a href="{% url 'add_experience' cv.CV_id %}" 
+       class="btn btn-info">
+       Skip
+    </a>
+
+    <!-- Save -->
+    <button type="submit"
+            name="action"
+            value="save"
+            class="btn btn-primary">
+        Save & Next
+    </button>
+
+    <!-- Cancel -->
+    <button type="submit"
+            name="action"
+            value="cancel"
+            formnovalidate
+            class="btn btn-danger">
+        Cancel
+    </button>
+
+</div>
+
+<!-- </form> -->
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const formContainer = document.getElementById("form-container");
+    const addBtn = document.getElementById("add-form");
+    const totalForms = document.getElementById("id_form-TOTAL_FORMS");
+    const emptyFormHtml = `
+        <div class="form-group">
+            <label for="id_form-__prefix__-Degree">Degree / Course</label>
+            <input type="text" name="form-__prefix__-Degree" placeholder="Degree / Course" required id="id_form-__prefix__-Degree" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="id_form-__prefix__-University">University / Institute</label>
+            <input type="text" name="form-__prefix__-University" placeholder="University / Institute" required id="id_form-__prefix__-University" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="id_form-__prefix__-Start_year">Start Year</label>
+            <input type="number" name="form-__prefix__-Start_year" placeholder="Start Year" id="id_form-__prefix__-Start_year" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="id_form-__prefix__-End_year">End Year</label>
+            <input type="number" name="form-__prefix__-End_year" placeholder="End Year" id="id_form-__prefix__-End_year" class="form-control">
+        </div>
+        <div class="form-group w-100">
+            <label for="id_form-__prefix__-Description">Description</label>
+            <textarea name="form-__prefix__-Description" placeholder="Description" rows="2" cols="40" id="id_form-__prefix__-Description" class="form-control"></textarea>
+        </div>
+        <input type="hidden" name="form-__prefix__-id" id="id_form-__prefix__-id">
+        <input type="hidden" name="form-__prefix__-DELETE" id="id_form-__prefix__-DELETE">
+        <button type="button" class="remove-form" aria-label="Remove this entry">
+            <i class="fas fa-trash-alt"></i>
+        </button>
+    `;
+
+    function attachRemoveHandlers() {
+        document.querySelectorAll(".remove-form").forEach(btn => {
+            btn.onclick = () => {
+                const formRow = btn.closest(".form-row");
+                const deleteBox = formRow.querySelector("input[name$='-DELETE']");
+                if (deleteBox) {
+                    deleteBox.checked = true;
+                    formRow.style.display = "none";
+                } else {
+                    formRow.remove();
+                    totalForms.value = document.querySelectorAll("#form-container .form-row").length;
+                }
+            };
+        });
+    }
+
+    addBtn.addEventListener("click", () => {
+        let formCount = parseInt(totalForms.value);
+        let newForm = emptyFormHtml.replace(/__prefix__/g, formCount);
+        let newDiv = document.createElement("div");
+        newDiv.classList.add("form-row");
+        newDiv.innerHTML = newForm;
+        formContainer.appendChild(newDiv);
+        totalForms.value = formCount + 1;
+        attachRemoveHandlers();
+    });
+
+    attachRemoveHandlers();
+});
+</script>
+
+{% endwith %}
+{% endblock %}

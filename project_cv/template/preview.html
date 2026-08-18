@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Choose Your CV Template{% endblock %}
+
+{% block content %}
+<style>
+.preview-container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 40px 20px;
+}
+
+.preview-title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 30px;
+  color: #2c3e50;
+}
+
+.preview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 25px;
+}
+
+.preview-card {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+}
+
+.preview-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+}
+
+.preview-card img {
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+}
+
+.preview-card-body {
+  padding: 15px;
+  text-align: center;
+}
+
+.preview-card-body h3 {
+  margin: 10px 0 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #34495e;
+}
+</style>
+
+<div class="preview-container">
+  <h2 class="preview-title">Choose Your CV Template</h2>
+
+  <div class="preview-grid">
+    <a href="{% url 'preview_cv' template_id=1 %}" class="preview-card">
+      <img src="/media/preview_images/theme1.png" alt="Template 1">
+ 
+      <div class="preview-card-body">
+        <h3>Classic  Vertical</h3>
+      </div>
+    </a>
+
+    <a href="{% url 'preview_cv' template_id=2 %}" class="preview-card">
+      <img src="{{ templates.1.Preview_image.url }}" alt="Template 2">
+      <div class="preview-card-body">
+        <h3>{{ templates.1.Template_Name }}</h3>
+      </div>
+    </a>
+
+    <a href="{% url 'preview_cv' template_id=3 %}" class="preview-card">
+      <img src="{{ templates.2.Preview_image.url }}" alt="Template 3">
+      <div class="preview-card-body">
+        <h3>{{ templates.2.Template_Name }}</h3>
+      </div>
+    </a>
+
+    <a href="{% url 'preview_cv' template_id=4 %}" class="preview-card">
+      <img src="{{ templates.3.Preview_image.url }}" alt="Template 4">
+      <div class="preview-card-body">
+        <h3>{{ templates.3.Template_Name }}</h3>
+      </div>
+    </a>
+
+    <a href="{% url 'preview_cv' template_id=5 %}" class="preview-card">
+      <img src="{{ templates.4.Preview_image.url }}" alt="Template 5">
+      <div class="preview-card-body">
+        <h3>{{ templates.4.Template_Name }}</h3>
+      </div>
+    </a>
+
+    <a href="{% url 'preview_cv' template_id=6 %}" class="preview-card">
+      <img src="{{ templates.5.Preview_image.url }}" alt="Template 6">
+      <div class="preview-card-body">
+        <h3>{{ templates.5.Template_Name }}</h3>
+      </div>
+    </a>
+    <a href="{% url 'preview_cv' template_id=7 %}" class="preview-card">
+    <img src="{{ templates.6.Preview_image.url }}" alt="Template 7">
+      <div class="preview-card-body">
+        <h3>{{ templates.6.Template_Name }}</h3>
+      </div>
+    </a>
+
+    <a href="{% url 'preview_cv' template_id=8 %}" class="preview-card">
+      <img src="{{ templates.7.Preview_image.url }}" alt="Template 8">
+      <div class="preview-card-body">
+        <h3>{{ templates.7.Template_Name }}</h3>
+      </div>
+    </a>
+  </div>
+</div>
+{% endblock %}
